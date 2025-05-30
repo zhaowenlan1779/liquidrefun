@@ -51,6 +51,9 @@ public:
 
 	void DrawString( b2Vec2 p, const char* string, ... );
 
+	void DrawParticles(const b2Vec2 *centers, float radius,
+                     const b2ParticleColor *colors, int count);
+
 	void DrawAABB( b2AABB aabb, b2HexColor color );
 
 	void Flush();

@@ -7,6 +7,10 @@
 
 #include "box2d/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct b2BroadPhase b2BroadPhase;
 typedef struct b2World b2World;
 
@@ -104,6 +108,10 @@ b2PlaneResult b2CollideMoverAndPolygon( const b2Polygon* shape, const b2Capsule*
 b2PlaneResult b2CollideMoverAndSegment( const b2Segment* shape, const b2Capsule* mover );
 b2PlaneResult b2CollideMover( const b2Shape* shape, b2Transform transform, const b2Capsule* mover );
 
+bool b2TestPointInternal( const b2Shape* shape, b2Transform transform, b2Vec2 point );
+
+float b2ShapeComputeDistance( b2Shape* shape, b2Transform xf, b2Vec2 target, b2Vec2* out_norm );
+
 static inline float b2GetShapeRadius( const b2Shape* shape )
 {
 	switch ( shape->type )
@@ -136,3 +144,7 @@ static inline bool b2ShouldQueryCollide( b2Filter shapeFilter, b2QueryFilter que
 
 B2_ARRAY_INLINE( b2ChainShape, b2ChainShape )
 B2_ARRAY_INLINE( b2Shape, b2Shape )
+
+#ifdef __cplusplus
+}
+#endif

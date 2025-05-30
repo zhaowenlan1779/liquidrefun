@@ -156,6 +156,22 @@ B2_API float b2Atan2( float y, float x );
 /// for cross-platform determinism.
 B2_API b2CosSin b2ComputeCosSin( float radians );
 
+B2_INLINE float b2InvSqrt(float x)
+{
+	union
+	{
+		float x;
+		int i;
+	} convert;
+
+	convert.x = x;
+	float xhalf = 0.5f * x;
+	convert.i = 0x5f3759df - (convert.i >> 1);
+	x = convert.x;
+	x = x * (1.5f - xhalf * x * x);
+	return x;
+}
+
 /// Vector dot product
 B2_INLINE float b2Dot( b2Vec2 a, b2Vec2 b )
 {

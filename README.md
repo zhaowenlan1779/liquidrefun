@@ -3,8 +3,16 @@
 # Build Status
 [![Build Status](https://github.com/erincatto/box2d/actions/workflows/build.yml/badge.svg)](https://github.com/erincatto/box2d/actions)
 
-# Box2D 
+# Box2D ~ LiquidReFun
 Box2D is a 2D physics engine for games.
+
+This is [LiquidFun](https://github.com/google/liquidfun) ported to the modern Box2D codebase.
+This is currently a minimal-effort port, so the particles code remains written in C++, and the particle solver is single-threaded.
+Minor changes and fixes have been made to accomodate for changes in Box2D.
+
+`b2CreateParticleSystem` and `b2DestroyParticleSystem` are public C APIs. To do anything with the `b2ParticleSystem` pointer, currently you will have to use the C++ headers in the `box2d/particle` directory.
+
+A few samples have been ported from the original LiquidFun.
 
 [![Box2D Version 3.0 Release Demo](https://img.youtube.com/vi/dAoM-xjOWtA/0.jpg)](https://www.youtube.com/watch?v=dAoM-xjOWtA)
 

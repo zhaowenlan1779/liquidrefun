@@ -42,9 +42,11 @@ struct SampleContext
 	bool drawGraphColors = false;
 	bool drawCounters = false;
 	bool drawProfile = false;
+	bool drawParticles = true;
 	bool enableWarmStarting = true;
 	bool enableContinuous = true;
 	bool enableSleep = true;
+	int particleIterations = 5;
 
 	// These are persisted
 	int sampleIndex = 0;

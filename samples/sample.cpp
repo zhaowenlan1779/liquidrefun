@@ -445,6 +445,7 @@ void Sample::Step(  )
 	m_context->draw.m_debugDraw.drawContactFeatures = m_context->drawContactFeatures;
 	m_context->draw.m_debugDraw.drawFrictionImpulses = m_context->drawFrictionImpulses;
 	m_context->draw.m_debugDraw.drawIslands = m_context->drawIslands;
+	m_context->draw.m_debugDraw.drawParticles = m_context->drawParticles;
 
 	b2World_EnableSleeping( m_worldId, m_context->enableSleep );
 	b2World_EnableWarmStarting( m_worldId, m_context->enableWarmStarting );
@@ -452,7 +453,7 @@ void Sample::Step(  )
 
 	for ( int i = 0; i < 1; ++i )
 	{
-		b2World_Step( m_worldId, timeStep, m_context->subStepCount );
+		b2World_Step( m_worldId, timeStep, m_context->subStepCount, m_context->particleIterations );
 		m_taskCount = 0;
 	}
 

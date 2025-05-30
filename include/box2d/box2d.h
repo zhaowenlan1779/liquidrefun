@@ -36,7 +36,7 @@ B2_API bool b2World_IsValid( b2WorldId id );
 /// @param worldId The world to simulate
 /// @param timeStep The amount of time to simulate, this should be a fixed number. Usually 1/60.
 /// @param subStepCount The number of sub-steps, increasing the sub-step count can increase accuracy. Usually 4.
-B2_API void b2World_Step( b2WorldId worldId, float timeStep, int subStepCount );
+B2_API void b2World_Step( b2WorldId worldId, float timeStep, int subStepCount, int particleIterations );
 
 /// Call this to draw shapes and other debug draw data
 B2_API void b2World_Draw( b2WorldId worldId, b2DebugDraw* draw );
@@ -1247,6 +1247,9 @@ B2_API float b2WheelJoint_GetMaxMotorTorque( b2JointId jointId );
 
 /// Get the wheel joint current motor torque, usually in newton-meters
 B2_API float b2WheelJoint_GetMotorTorque( b2JointId jointId );
+
+B2_API b2ParticleSystem* b2CreateParticleSystem( b2WorldId worldId, const b2ParticleSystemDef* def);
+B2_API void b2DestroyParticleSystem( b2ParticleSystem* system );
 
 /**@}*/
 

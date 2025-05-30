@@ -78,7 +78,7 @@ int HelloWorld( void )
 	{
 		// Instruct the world to perform a single step of simulation.
 		// It is generally best to keep the time step and iterations fixed.
-		b2World_Step( worldId, timeStep, subStepCount );
+		b2World_Step( worldId, timeStep, subStepCount, 0 );
 
 		// Now print the position and angle of the body.
 		position = b2Body_GetPosition( bodyId );
@@ -109,7 +109,7 @@ int EmptyWorld( void )
 
 	for ( int32_t i = 0; i < 60; ++i )
 	{
-		b2World_Step( worldId, timeStep, subStepCount );
+		b2World_Step( worldId, timeStep, subStepCount, 0 );
 	}
 
 	b2DestroyWorld( worldId );
@@ -158,7 +158,7 @@ int DestroyAllBodiesWorld( void )
 			count -= 1;
 		}
 
-		b2World_Step( worldId, 1.0f / 60.0f, 3 );
+		b2World_Step( worldId, 1.0f / 60.0f, 3, 0 );
 	}
 
 	b2Counters counters = b2World_GetCounters( worldId );
@@ -229,7 +229,7 @@ int TestWorldRecycle( void )
 
 			for ( int k = 0; k < 10; ++k )
 			{
-				b2World_Step( worldIds[j], timeStep, subStepCount );
+				b2World_Step( worldIds[j], timeStep, subStepCount, 0 );
 			}
 		}
 
@@ -319,7 +319,7 @@ int TestWorldCoverage( void )
 	void* userData = b2World_GetUserData( worldId );
 	ENSURE( userData == &value );
 
-	b2World_Step( worldId, 1.0f, 1 );
+	b2World_Step( worldId, 1.0f, 1, 0 );
 
 	b2DestroyWorld( worldId );
 
@@ -363,7 +363,7 @@ static int TestSensor( void )
 	{
 		float timeStep = 1.0f / 60.0f;
 		int subStepCount = 4;
-		b2World_Step( worldId, timeStep, subStepCount );
+		b2World_Step( worldId, timeStep, subStepCount, 0 );
 
 		b2Vec2 bulletPos = b2Body_GetPosition( bulletId );
 		//printf( "Bullet pos: %g %g\n", bulletPos.x, bulletPos.y );

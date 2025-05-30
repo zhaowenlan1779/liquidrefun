@@ -1,6 +1,16 @@
 include(GNUInstallDirs)
 
 set(BOX2D_SOURCE_FILES
+	particle/b2Particle.cpp
+	particle/b2ParticleGroup.cpp
+	particle/b2ParticleSystem.cpp
+	particle/b2StackQueue.h
+	particle/b2VoronoiDiagram.cpp
+	particle/b2VoronoiDiagram.h
+	particle/common/b2BlockAllocator.cpp
+	particle/common/b2FreeList.cpp
+	particle/common/b2StackAllocator.cpp
+	particle/common/b2TrackedBlock.cpp
 	aabb.c
 	aabb.h
 	arena_allocator.c
@@ -66,6 +76,17 @@ set(BOX2D_API_FILES
 	../include/box2d/collision.h
 	../include/box2d/id.h
 	../include/box2d/math_functions.h
+	../include/box2d/particle/b2Particle.h
+	../include/box2d/particle/b2ParticleGroup.h
+	../include/box2d/particle/b2ParticleSystem.h
+	../include/box2d/particle/common/b2BlockAllocator.h
+	../include/box2d/particle/common/b2FreeList.h
+	../include/box2d/particle/common/b2GrowableBuffer.h
+	../include/box2d/particle/common/b2IntrusiveList.h
+	../include/box2d/particle/common/b2Settings.h
+	../include/box2d/particle/common/b2SlabAllocator.h
+	../include/box2d/particle/common/b2StackAllocator.h
+	../include/box2d/particle/common/b2TrackedBlock.h
 	../include/box2d/types.h
 )
 
@@ -79,6 +100,7 @@ add_library(box2d ${BOX2D_SOURCE_FILES} ${BOX2D_API_FILES})
 target_include_directories(box2d
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include/box2d>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE

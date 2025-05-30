@@ -1383,6 +1383,8 @@ typedef enum b2HexColor
 	b2_colorBox2DYellow = 0xFFEE8C
 } b2HexColor;
 
+typedef struct b2ParticleColor b2ParticleColor;
+
 /// This struct holds callbacks you can implement to draw a Box2D world.
 /// This structure should be zero initialized.
 /// @ingroup world
@@ -1416,6 +1418,10 @@ typedef struct b2DebugDraw
 	/// Draw a string in world space
 	void ( *DrawStringFcn )( b2Vec2 p, const char* s, b2HexColor color, void* context );
 
+	/// Draw a particle system.
+	void ( *DrawParticlesFcn ) (const b2Vec2 *centers, float radius,
+                     const b2ParticleColor *colors, int count, void* context);
+
 	/// Bounds to use if restricting drawing to a rectangular region
 	b2AABB drawingBounds;
 
@@ -1424,6 +1430,8 @@ typedef struct b2DebugDraw
 
 	/// Option to draw shapes
 	bool drawShapes;
+
+	bool drawParticles;
 
 	/// Option to draw joints
 	bool drawJoints;
@@ -1468,3 +1476,6 @@ typedef struct b2DebugDraw
 /// Use this to initialize your drawing interface. This allows you to implement a sub-set
 /// of the drawing functions.
 B2_API b2DebugDraw b2DefaultDebugDraw( void );
+
+typedef struct b2ParticleSystem b2ParticleSystem;
+typedef struct b2ParticleSystemDef b2ParticleSystemDef;

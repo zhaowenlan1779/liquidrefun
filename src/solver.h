@@ -15,6 +15,7 @@ typedef struct b2BodyState b2BodyState;
 typedef struct b2ContactSim b2ContactSim;
 typedef struct b2JointSim b2JointSim;
 typedef struct b2World b2World;
+typedef struct b2ParticleSystem b2ParticleSystem;
 
 typedef struct b2Softness
 {
@@ -85,6 +86,8 @@ typedef struct b2StepContext
 	float inv_h;
 
 	int subStepCount;
+
+	int particleIterations;
 
 	b2Softness jointSoftness;
 	b2Softness contactSoftness;
@@ -162,3 +165,9 @@ static inline b2Softness b2MakeSoft( float hertz, float zeta, float h )
 }
 
 void b2Solve( b2World* world, b2StepContext* stepContext );
+
+#ifdef __cplusplus
+extern "C" void b2ParticleSystemSolve( b2ParticleSystem* list, b2StepContext* stepContext );
+#else
+void b2ParticleSystemSolve( b2ParticleSystem* list, b2StepContext* stepContext);
+#endif

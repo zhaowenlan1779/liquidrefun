@@ -6,6 +6,7 @@
 #include "shader.h"
 
 #include "box2d/math_functions.h"
+#include "box2d/particle/b2Particle.h"
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -1184,6 +1185,12 @@ void DrawStringFcn( b2Vec2 p, const char* s, b2HexColor color, void* context )
 	static_cast<Draw*>( context )->DrawString( p, s );
 }
 
+void DrawParticlesFcn (const b2Vec2 *centers, float radius,
+                     const b2ParticleColor *colors, int count, void* context)
+{
+	static_cast<Draw*>( context )->DrawParticles(centers, radius, colors, count);
+}
+
 Draw::Draw()
 {
 	m_camera = nullptr;
@@ -1244,6 +1251,7 @@ void Draw::Create( Camera* camera )
 	m_debugDraw.DrawTransformFcn = DrawTransformFcn;
 	m_debugDraw.DrawPointFcn = DrawPointFcn;
 	m_debugDraw.DrawStringFcn = DrawStringFcn;
+	m_debugDraw.DrawParticlesFcn = DrawParticlesFcn;
 	m_debugDraw.drawingBounds = bounds;
 
 	m_debugDraw.useDrawingBounds = false;
@@ -1397,6 +1405,18 @@ void Draw::DrawAABB( b2AABB aabb, b2HexColor c )
 	m_lines->AddLine( p2, p3, c );
 	m_lines->AddLine( p3, p4, c );
 	m_lines->AddLine( p4, p1, c );
+}
+
+void Draw::DrawParticles(const b2Vec2 *centers, float radius,
+                     const b2ParticleColor *colors, int count) {
+	for (int i = 0; i < count; ++i) {
+		if (colors == NULL) {
+			DrawCircle(centers[i], radius, b2_colorPink);
+		} else {
+			const b2HexColor color = static_cast<b2HexColor>((static_cast<uint32_t>(colors[i].r) << 16) | (static_cast<uint32_t>(colors[i].g) << 8) | (static_cast<uint32_t>(colors[i].b)));
+			DrawCircle(centers[i], radius, color);
+		}
+	}
 }
 
 void Draw::Flush()

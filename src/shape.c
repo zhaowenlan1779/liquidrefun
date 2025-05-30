@@ -1000,6 +1000,25 @@ bool b2Shape_TestPoint( b2ShapeId shapeId, b2Vec2 point )
 	}
 }
 
+bool b2TestPointInternal( const b2Shape* shape, b2Transform transform, b2Vec2 point ) {
+	b2Vec2 localPoint = b2InvTransformPoint( transform, point );
+
+	switch ( shape->type )
+	{
+		case b2_capsuleShape:
+			return b2PointInCapsule( localPoint, &shape->capsule );
+
+		case b2_circleShape:
+			return b2PointInCircle( localPoint, &shape->circle );
+
+		case b2_polygonShape:
+			return b2PointInPolygon( localPoint, &shape->polygon );
+
+		default:
+			return false;
+	}
+}
+
 // todo_erin untested
 b2CastOutput b2Shape_RayCast( b2ShapeId shapeId, const b2RayCastInput* input )
 {
@@ -1737,4 +1756,23 @@ b2Vec2 b2Shape_GetClosestPoint( b2ShapeId shapeId, b2Vec2 target )
 	b2DistanceOutput output = b2ShapeDistance( &input, &cache, NULL, 0 );
 
 	return output.pointA;
+}
+
+float b2ShapeComputeDistance( b2Shape* shape, b2Transform xf, b2Vec2 target, b2Vec2* out_norm )
+{
+	b2DistanceInput input;
+	input.proxyA = b2MakeShapeDistanceProxy( shape );
+	input.proxyB = b2MakeProxy( &target, 1, 0.0f );
+	input.transformA = xf;
+	input.transformB = b2Transform_identity;
+	input.useRadii = true;
+
+	b2SimplexCache cache = { 0 };
+	b2DistanceOutput output = b2ShapeDistance( &input, &cache, NULL, 0 );
+
+	if (out_norm) {
+		*out_norm = output.normal;
+	}
+
+	return output.distance;
 }

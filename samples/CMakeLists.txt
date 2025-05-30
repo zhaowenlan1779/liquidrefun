@@ -88,6 +88,7 @@ set(BOX2D_SAMPLE_FILES
 	sample_events.cpp
 	sample_geometry.cpp
 	sample_joints.cpp
+	sample_particle.cpp
 	sample_robustness.cpp
 	sample_shapes.cpp
 	sample_stacking.cpp

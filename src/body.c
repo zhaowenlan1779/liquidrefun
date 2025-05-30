@@ -240,6 +240,7 @@ b2BodyId b2CreateBody( b2WorldId worldId, const b2BodyDef* def )
 	bodySim->center = def->position;
 	bodySim->rotation0 = bodySim->transform.q;
 	bodySim->center0 = bodySim->center;
+	bodySim->transform0 = bodySim->transform;
 	bodySim->minExtent = B2_HUGE;
 	bodySim->maxExtent = 0.0f;
 	bodySim->linearDamping = def->linearDamping;
@@ -702,6 +703,7 @@ void b2Body_SetTransform( b2BodyId bodyId, b2Vec2 position, b2Rot rotation )
 
 	bodySim->rotation0 = bodySim->transform.q;
 	bodySim->center0 = bodySim->center;
+	bodySim->transform0 = bodySim->transform;
 
 	b2BroadPhase* broadPhase = &world->broadPhase;
 
@@ -879,6 +881,15 @@ b2Vec2 b2Body_GetLocalPointVelocity( b2BodyId bodyId, b2Vec2 localPoint )
 	return v;
 }
 
+b2Vec2 b2GetLinearVelocityFromWorldPointInternal(b2BodyState* state, b2BodySim* bodySim, b2Vec2 worldPoint) {
+	if (state == NULL) {
+		return b2Vec2_zero;
+	}
+	b2Vec2 r = b2Sub( worldPoint, bodySim->center );
+	b2Vec2 v = b2Add( state->linearVelocity, b2CrossSV( state->angularVelocity, r ) );
+	return v;
+}
+
 b2Vec2 b2Body_GetWorldPointVelocity( b2BodyId bodyId, b2Vec2 worldPoint )
 {
 	b2World* world = b2GetWorld( bodyId.world0 );
@@ -891,10 +902,7 @@ b2Vec2 b2Body_GetWorldPointVelocity( b2BodyId bodyId, b2Vec2 worldPoint )
 
 	b2SolverSet* set = b2SolverSetArray_Get( &world->solverSets, body->setIndex );
 	b2BodySim* bodySim = b2BodySimArray_Get( &set->bodySims, body->localIndex );
-
-	b2Vec2 r = b2Sub( worldPoint, bodySim->center );
-	b2Vec2 v = b2Add( state->linearVelocity, b2CrossSV( state->angularVelocity, r ) );
-	return v;
+	return b2GetLinearVelocityFromWorldPointInternal(state, bodySim, worldPoint);
 }
 
 void b2Body_ApplyForce( b2BodyId bodyId, b2Vec2 force, b2Vec2 point, bool wake )
@@ -946,6 +954,23 @@ void b2Body_ApplyTorque( b2BodyId bodyId, float torque, bool wake )
 	{
 		b2BodySim* bodySim = b2GetBodySim( world, body );
 		bodySim->torque += torque;
+	}
+}
+
+void b2ApplyLinearImpulseInternal( b2World* world, b2Body* body, b2BodyState* state, b2BodySim* bodySim, b2Vec2 impulse, b2Vec2 point, bool wake )
+{
+	if ( wake && body->setIndex >= b2_firstSleepingSet )
+	{
+		b2WakeBody( world, body );
+		state = b2GetBodyState(world, body);
+	}
+
+	if ( body->setIndex == b2_awakeSet )
+	{
+		state->linearVelocity = b2MulAdd( state->linearVelocity, bodySim->invMass, impulse );
+		state->angularVelocity += bodySim->invInertia * b2Cross( b2Sub( point, bodySim->center ), impulse );
+
+		b2LimitVelocity(state, world->maxLinearSpeed );
 	}
 }
 

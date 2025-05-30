@@ -577,6 +577,7 @@ static void b2FinalizeBodiesTask( int startIndex, int endIndex, uint32_t threadI
 		B2_ASSERT( b2IsValidVec2( v ) );
 		B2_ASSERT( b2IsValidFloat( w ) );
 
+		sim->transform0 = sim->transform;
 		sim->center = b2Add( sim->center, state->deltaPosition );
 		sim->transform.q = b2NormalizeRot( b2MulRot( state->deltaRotation, sim->transform.q ) );
 

@@ -106,7 +106,7 @@ static int SingleMultithreadingTest( int workerCount )
 	while ( done == false )
 	{
 		int subStepCount = 4;
-		b2World_Step( worldId, timeStep, subStepCount );
+		b2World_Step( worldId, timeStep, subStepCount, 0 );
 		TracyCFrameMark;
 
 		done = UpdateFallingHinges( worldId, &data );
@@ -155,7 +155,7 @@ static int CrossPlatformTest( void )
 	while ( done == false )
 	{
 		int subStepCount = 4;
-		b2World_Step( worldId, timeStep, subStepCount );
+		b2World_Step( worldId, timeStep, subStepCount, 0 );
 		TracyCFrameMark;
 
 		done = UpdateFallingHinges( worldId, &data );

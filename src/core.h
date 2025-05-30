@@ -5,6 +5,10 @@
 
 #include "box2d/math_functions.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // clang-format off
 
 #define B2_NULL_INDEX ( -1 )
@@ -147,3 +151,7 @@ void b2Free( void* mem, int size );
 #define B2_FREE_ARRAY( mem, count, type ) b2Free(mem, count * sizeof(type))
 
 void* b2GrowAlloc( void* oldMem, int oldSize, int newSize );
+
+#ifdef __cplusplus
+}
+#endif

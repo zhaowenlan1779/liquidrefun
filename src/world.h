@@ -12,6 +12,10 @@
 
 #include "box2d/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum b2SetType
 {
 	b2_staticSet = 0,
@@ -94,6 +98,8 @@ typedef struct b2World
 
 	// This is a dense array of sensor data.
 	b2SensorArray sensors;
+
+	b2ParticleSystem* particleSystemList;
 
 	// Per thread storage
 	b2TaskContextArray taskContexts;
@@ -190,3 +196,9 @@ B2_ARRAY_INLINE( b2ContactHitEvent, b2ContactHitEvent )
 B2_ARRAY_INLINE( b2SensorBeginTouchEvent, b2SensorBeginTouchEvent )
 B2_ARRAY_INLINE( b2SensorEndTouchEvent, b2SensorEndTouchEvent )
 B2_ARRAY_INLINE( b2TaskContext, b2TaskContext )
+
+void b2DrawParticleSystem( b2ParticleSystem* list, b2DebugDraw* draw);
+
+#ifdef __cplusplus
+}
+#endif

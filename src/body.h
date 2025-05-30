@@ -8,6 +8,10 @@
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct b2World b2World;
 
 // Body organizational details that are not used in the solver.
@@ -130,6 +134,9 @@ typedef struct b2BodySim
 	b2Rot rotation0;
 	b2Vec2 center0;
 
+	// previous transform for TOI
+	b2Transform transform0;
+
 	// location of center of mass relative to the body origin
 	b2Vec2 localCenter;
 
@@ -177,6 +184,9 @@ bool b2WakeBody( b2World* world, b2Body* body );
 
 void b2UpdateBodyMassData( b2World* world, b2Body* body );
 
+void b2ApplyLinearImpulseInternal( b2World* world, b2Body* body, b2BodyState* state, b2BodySim* bodySim, b2Vec2 impulse, b2Vec2 point, bool wake );
+b2Vec2 b2GetLinearVelocityFromWorldPointInternal(b2BodyState* state, b2BodySim* bodySim, b2Vec2 worldPoint);
+
 static inline b2Sweep b2MakeSweep( const b2BodySim* bodySim )
 {
 	b2Sweep s;
@@ -192,3 +202,7 @@ static inline b2Sweep b2MakeSweep( const b2BodySim* bodySim )
 B2_ARRAY_INLINE( b2Body, b2Body )
 B2_ARRAY_INLINE( b2BodySim, b2BodySim )
 B2_ARRAY_INLINE( b2BodyState, b2BodyState )
+
+#ifdef __cplusplus
+}
+#endif

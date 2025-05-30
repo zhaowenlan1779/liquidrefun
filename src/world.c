@@ -173,6 +173,8 @@ b2WorldId b2CreateWorld( const b2WorldDef* def )
 
 	world->sensors = b2SensorArray_Create( 4 );
 
+	world->particleSystemList = NULL;
+
 	world->bodyMoveEvents = b2BodyMoveEventArray_Create( 4 );
 	world->sensorBeginEvents = b2SensorBeginTouchEventArray_Create( 4 );
 	world->sensorEndEvents[0] = b2SensorEndTouchEventArray_Create( 4 );
@@ -265,6 +267,11 @@ b2WorldId b2CreateWorld( const b2WorldDef* def )
 void b2DestroyWorld( b2WorldId worldId )
 {
 	b2World* world = b2GetWorldFromId( worldId );
+
+	while (world->particleSystemList)
+	{
+		b2DestroyParticleSystem(world->particleSystemList);
+	}
 
 	b2DestroyBitSet( &world->debugBodySet );
 	b2DestroyBitSet( &world->debugJointSet );
@@ -694,7 +701,7 @@ static void b2Collide( b2StepContext* context )
 	b2TracyCZoneEnd( collide );
 }
 
-void b2World_Step( b2WorldId worldId, float timeStep, int subStepCount )
+void b2World_Step( b2WorldId worldId, float timeStep, int subStepCount, int particleIterations )
 {
 	B2_ASSERT( b2IsValidFloat( timeStep ) );
 	B2_ASSERT( 0 < subStepCount );
@@ -745,6 +752,7 @@ void b2World_Step( b2WorldId worldId, float timeStep, int subStepCount )
 	context.world = world;
 	context.dt = timeStep;
 	context.subStepCount = b2MaxInt( 1, subStepCount );
+	context.particleIterations = particleIterations;
 
 	if ( timeStep > 0.0f )
 	{
@@ -784,6 +792,7 @@ void b2World_Step( b2WorldId worldId, float timeStep, int subStepCount )
 	if ( context.dt > 0.0f )
 	{
 		uint64_t solveTicks = b2GetTicks();
+		b2ParticleSystemSolve(world->particleSystemList, &context );
 		b2Solve( world, &context );
 		world->profile.solve = b2GetMilliseconds( solveTicks );
 	}
@@ -1248,6 +1257,11 @@ void b2World_Draw( b2WorldId worldId, b2DebugDraw* draw )
 				}
 			}
 		}
+	}
+
+	if ( draw->drawParticles )
+	{
+		b2DrawParticleSystem(world->particleSystemList, draw);
 	}
 
 	if ( draw->drawJoints )
